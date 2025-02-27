@@ -1,0 +1,366 @@
+.App {
+  text-align: center;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden; /* Запрещаем горизонтальный скролл */
+}
+
+
+.welcome-container {
+  color: white;
+  font-size: 38px;
+  line-height: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Полный экран */
+  text-align: center;
+  background-image: url("../public/images/back-welcome.jpg");
+  background-size: 100%; /* Увеличь значение, чтобы картинка казалась дальше */
+}
+
+
+
+.welcome-logo {
+  width: 300px; /* Размер логотипа */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+
+/* Основной стиль для navbar */
+.navbar {
+  background: linear-gradient(to bottom, rgba(7, 7, 7, 0.9), rgba(51, 51, 51, 0));
+  padding: 10px 20px;
+  color: white;
+  position: absolute;
+  width: 100%;
+
+}
+
+.welcome-info {
+  padding: 150px;
+  font-size: 25px;
+  background-color: rgb(242, 242, 242);
+  text-align: center;
+  width: 100%;
+}
+
+.welcome-info p {
+  margin-bottom: 30px;
+}
+/* Контейнер для элементов навигации */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Стили для ссылок */
+.navbar-links {
+  display: flex;
+  align-items: center; /* Выравниваем всё по одной линии */
+  list-style: none;
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.navbar-links li {
+  display: flex; /* Чтобы `button` внутри `li` не "падал" */
+  align-items: center;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.navbar-links a {
+  text-transform: uppercase;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 5px 10px;
+  transition: 0.3s ease-out;
+  
+}
+
+.navbar-links a:hover {
+  color: #ff8562;
+  transition: 0.2s ease-in;
+}
+
+.booking-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.booking-form h2 {
+  text-align: center;
+  color: #333;
+}
+
+.booking-form label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #555;
+}
+
+.booking-form select,
+.booking-form input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.booking-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.booking-form button:hover {
+  background-color: #218838;
+}
+
+.button {
+  background-color: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 8px;
+  box-shadow: rgba(217, 213, 214, 0.5) 0 2px 5px 0;
+  box-sizing: border-box;
+  color: #0f1111;
+  cursor: pointer;
+  display: flex; /* Делаем его похожим на ссылки */
+  align-items: center; /* Выравниваем текст по вертикали */
+  justify-content: center;
+  font-family: "Amazon Ember", sans-serif;
+  font-size: 1rem; /* Сделаем такой же, как у ссылок */
+  line-height: normal; /* Убираем лишний отступ */
+  padding: 5px 10px; /* Совпадает с `a` */
+  text-decoration: none;
+  text-transform: uppercase;
+  width: auto;
+  min-width: 100px;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #ff8562;
+  border: 1px solid #ff8562;
+  box-shadow: rgba(252, 124, 156, 0.5) 0 2px 5px 0;
+}
+
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.discount-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  gap: 10px;
+  scroll-behavior: smooth; /* Добавляем плавную анимацию для прокрутки */
+}
+
+
+.discount-item {
+  min-width: 50px; 
+  background-color: #f3f3f3;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* Располагаем скидку и время вертикально */
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.discount-link {
+  text-decoration: none;
+  color: #de47e0;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.discount-link:hover {
+  background-color: #cf00d3;
+  transform: scale(1.05); /* Легкое увеличение при наведении */
+}
+
+.discount-navigation button:disabled {
+  background-color: #ddd;
+}
+
+.discount-navigation button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.discount-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.discount-time {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px; /* Отступ сверху для отделения времени от скидки */
+}
+
+.discount-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-button {
+  color: white;
+  border: none;
+  padding: 10px;
+
+  cursor: pointer;
+  font-size: 20px;
+  margin: 10px;
+  transition: 0.2s;
+}
+
+.scroll-button:hover {
+ color:#555;
+ transition: 0.2s;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.home-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.restaurant-list {
+  display: flex;
+  flex-wrap: wrap; /* Размещение ресторанов в несколько строк */
+  gap: 20px; /* Расстояние между ресторанами */
+  justify-content: flex-start; /* Выровнять по левому краю */
+}
+
+.restaurant-card {
+  width: 23%; /* Размер карточки ресторана, чтобы они располагались в несколько колонок */
+  min-width: 250px; /* Минимальная ширина карточки */
+  flex-grow: 1; /* Позволяет карточкам растягиваться */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.restaurant-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.restaurant-info {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.restaurant-info h3 {
+  margin: 0;
+  color: #222;
+}
+
+.restaurant-info p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.discount-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.discount-container a {
+  background: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.discount-container a:hover {
+  background: #218838;
+}
+
+.no-discount {
+  color: #777;
+  font-style: italic;
+}
