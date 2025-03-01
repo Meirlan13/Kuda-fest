@@ -141,6 +141,14 @@ function BookingPage() {
                     )}
                     <button type="submit">Забронировать</button>
                 </form>
+                {isAuthenticated && user?.admin === restaurant?.id && (
+    <button 
+        onClick={() => navigate(`/edit-restaurant/${restaurant.id}`)} 
+        style={{ backgroundColor: "red", color: "white", padding: "10px", border: "none", cursor: "pointer" }}
+    >
+        Редактировать скидки
+    </button>
+)}
             </div>
          </div>
          <Comments restaurantId={restaurantId} user={user} />

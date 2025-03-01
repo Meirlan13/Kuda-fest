@@ -19,8 +19,8 @@ const sendSms = (phoneNumber, message) => {
 const pool = new Pool({
   user: 'meirs', // your username
   host: 'localhost',
-  database: 'Restik', // your database name
-  password: 'password', // your password
+  database: 'postgres', // your database name
+  password: 'nomer321', // your password
   port: 5432,
 });
 
@@ -175,6 +175,90 @@ const getRestaurant = (req, res)=>{
     })
 }
 
+const postOffers = async (req, res) => {
+  try {
+      const { offerId, discount } = req.body;
+      const userId = req.user?.id;
+
+      if (!offerId || discount === undefined) {
+          return res.status(400).json({ error: "Необходимы offerId и discount" });
+      }
+
+      // Получаем admin_id ресторана, связанного с этим offerId
+      const restaurantQuery = await pool.query(
+          `SELECT r.admin_id FROM restaurants r 
+           JOIN offers o ON r.id = o.restaurant_id 
+           WHERE o.id = $1`,
+          [offerId]
+      );
+
+      if (restaurantQuery.rowCount === 0) {
+          return res.status(404).json({ error: "Ресторан или скидка не найдены" });
+      }
+
+      const restaurantAdminId = restaurantQuery.rows[0].admin_id;
+
+      // Проверяем, является ли текущий пользователь админом этого ресторана
+      if (Number(userId) !== Number(restaurantAdminId)) {
+          return res.status(403).json({ message: "У вас нет прав на редактирование этой скидки" });
+      }
+
+      // Обновляем **discount**
+      const updateQuery = await pool.query(
+          `UPDATE offers SET discount = $1 WHERE id = $2 RETURNING *`,
+          [discount, offerId]
+      );
+
+      res.json({ message: "Скидка обновлена", updatedOffer: updateQuery.rows[0] });
+
+  } catch (error) {
+      console.error("Ошибка при обновлении скидки:", error);
+      res.status(500).json({ error: "Ошибка сервера" });
+  }
+};
+
+
+
+const getRestaurantsDiscounts = async (req, res) => {
+  try {
+      const { restId } = req.params;
+      const userId = req.user?.id;
+
+      // Получаем admin_id ресторана
+      const restaurantQuery = await pool.query(
+          `SELECT admin_id FROM restaurants WHERE id = $1`,
+          [restId]
+      );
+
+      if (restaurantQuery.rowCount === 0) {
+          return res.status(404).json({ error: "Ресторан не найден" });
+      }
+
+      const restaurantAdminId = restaurantQuery.rows[0].admin_id;
+
+      // Проверяем, является ли пользователь админом ресторана
+      if (userId !== restaurantAdminId) {
+          return res.status(403).json({ message: "У вас нет прав на просмотр скидок этого ресторана" });
+      }
+
+      // Получаем скидки ресторана
+      const discountsQuery = await pool.query(
+          `SELECT id, restaurant_id, discount, 
+                  TO_CHAR(valid_time, 'HH24:MI') AS valid_time
+           FROM offers
+           WHERE restaurant_id = $1
+           ORDER BY valid_time ASC`,
+          [restId]
+      );
+
+      res.json(discountsQuery.rows);
+  } catch (err) {
+      console.error("Ошибка загрузки скидок:", err);
+      res.status(500).json({ error: "Ошибка базы данных" });
+  }
+};
+
+
 const getDiscounts = (req,res)=>{ 
     pool.query(`SELECT id, restaurant_id, discount, TO_CHAR(valid_time, 'HH24:MI') AS valid_time
 FROM offers
@@ -190,4 +274,4 @@ ORDER BY valid_time ASC;`,(err,result)=>{
 
 
 
-module.exports = { pool, getBookings, createOffer, bookOffer, getOffers ,getDiscounts, getRestaurant, getReviews, postReviews };
+module.exports = { pool,postOffers, getRestaurantsDiscounts, getBookings, createOffer, bookOffer, getOffers ,getDiscounts, getRestaurant, getReviews, postReviews };

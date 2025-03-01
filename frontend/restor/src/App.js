@@ -47,6 +47,7 @@ import BookingPage from "./componets/BookingPage";
 import TrackBooking from "./componets/TrackBooking";
 import Home from "./componets/Home"
 import AuthModal from "./componets/AuthModal";
+import AdminPage from "./componets/AdminPage";
 
 function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -60,6 +61,7 @@ function App() {
       <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/edit-restaurant/:restaurantId" element={<AdminPage />} />
           <Route path="/contact" element={<Contacts />} />
           <Route path="/bookings" element={<Bookings />} />
           <Route path="/booking/:restaurantId" element={<BookingPage />} />

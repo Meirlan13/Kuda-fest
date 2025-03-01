@@ -1,5 +1,5 @@
 const express = require('express');
-const { pool, postReviews, getReviews, getBookings, createOffer, bookOffer, getOffers, getDiscounts, getRestaurant } = require('./querries'); // Use queries.js for db connection and queries
+const { pool, postReviews, postOffers, getRestaurantsDiscounts, getReviews, getBookings, createOffer, bookOffer, getOffers, getDiscounts, getRestaurant } = require('./querries'); // Use queries.js for db connection and queries
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -145,6 +145,8 @@ app.post('/register', async (req, res) => {
   
   app.get('/discounts/', getDiscounts);
   
+  app.get('/discounts/:restId', getRestaurantsDiscounts)
+
 app.get('/login', (req, res) => {
     const errorMessage = req.flash('error');  // Получаем сообщение об ошибке
     res.send(`<h1>Login Page</h1><p>${errorMessage}</p>`);
@@ -197,6 +199,8 @@ app.get('/bookings', async (req, res) => {
 app.get('/reviews/:restaurantId', getReviews);
 
 app.post('/postreview', postReviews);
+
+app.post('/edit-restaurant', postOffers);
 
   app.get('/track-order/:reservationToken', (req, res) => {
     const { reservationToken } = req.params;
