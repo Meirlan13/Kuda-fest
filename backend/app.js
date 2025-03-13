@@ -11,8 +11,8 @@ const port = 3001;
 
 
 
-const accountSid = 'AC44ec817d81c2732180d95bbb1ea31045'; 
-const authToken = '4337635c69eb9815ea74deaeced05ff3'; 
+const accountSid = '1231'; 
+const authToken = '2123'; 
 const client = twilio(accountSid, authToken);
 
 const sendSms = (phoneNumber, restaurantName, bookingTime) => {
