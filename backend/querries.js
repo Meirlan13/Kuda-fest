@@ -2,8 +2,8 @@
 const { Pool } = require('pg');
 const twilio = require('twilio');
 const crypto = require('crypto');
-const accountSid = 'AC44ec817d81c2732180d95bbb1ea31045'; 
-const authToken = '4337635c69eb9815ea74deaeced05ff3'; 
+const accountSid = '1231'; 
+const authToken = '1231'; 
 const client = twilio(accountSid, authToken);
 
 
@@ -11,16 +11,16 @@ const sendSms = (phoneNumber, message) => {
 
   return client.messages.create({
       body: message,
-      from: '+18145244775',
+      from: '+123',
       to: phoneNumber 
   });
 };
 
 const pool = new Pool({
-  user: 'meirs',
-  host: 'localhost',
+  user: '123',
+  host: '123',
   database: 'Restik', 
-  password: 'nomer321', 
+  password: '123', 
   port: 5432,
 });
 
