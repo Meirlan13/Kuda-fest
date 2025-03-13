@@ -20,7 +20,7 @@ const sendSms = (phoneNumber, restaurantName, bookingTime) => {
 
   return client.messages.create({
       body: message,
-      from: '+18145244775', 
+      from: '+123123', 
       to: phoneNumber 
   });
 };
