@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import MakeReview from './MakeReview'; // Форма для отзыва
-import AuthModal from './AuthModal'; // Модальное окно авторизации
+import MakeReview from './MakeReview'; 
+import AuthModal from './AuthModal'; 
 import '../App.css';
 
 function Comments({ restaurantId, user, onLoginClick }) { 
@@ -32,10 +32,18 @@ function Comments({ restaurantId, user, onLoginClick }) {
     }, [fetchComments]); 
 
     const handleLeaveReview = () => {
-        if (!user) {
-            setShowAuthModal(true); // Открываем модалку авторизации
+        if (user) {
+            setShowReviewModal(true); 
         } else {
-            setShowReviewModal(true); // Открываем модалку для отзыва
+            setShowAuthModal(true);
+        }
+    };
+
+    const handleReviewSubmit = () => {
+        if (!user) {
+            setShowAuthModal(true);
+        } else {
+            setShowReviewModal(false); 
         }
     };
 
@@ -57,13 +65,14 @@ function Comments({ restaurantId, user, onLoginClick }) {
                             refreshComments={fetchComments} 
                             user={user} 
                             onClose={() => setShowReviewModal(false)} 
+                            onSubmit={handleReviewSubmit} 
                         />
                     </div>
                 </div>
             )}
 
             {/* Модалка для входа */}
-            {showAuthModal && <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />}
+            {showAuthModal && !user && <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />}
 
             {comments.length === 0 ? (
                 <p>Отзывов пока нет</p>

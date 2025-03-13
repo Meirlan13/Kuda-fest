@@ -2,7 +2,6 @@ import Restaurants from "./Restaurants";
 import Contacts from "./Contacts";
 import Welcome from "./Welcome";
 // import FAQ from "./FAQ";
-// import AnotherComponent from "./AnotherComponent"; // Дополнительный компонент
 
 function Home() {
     return (

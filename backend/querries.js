@@ -11,20 +11,19 @@ const sendSms = (phoneNumber, message) => {
 
   return client.messages.create({
       body: message,
-      from: '+18145244775', // Номер Twilio
-      to: phoneNumber // Номер телефона пользователя
+      from: '+18145244775',
+      to: phoneNumber 
   });
 };
 
 const pool = new Pool({
-  user: 'meirs', // your username
+  user: 'meirs',
   host: 'localhost',
-  database: 'postgres', // your database name
-  password: 'nomer321', // your password
+  database: 'Restik', 
+  password: 'nomer321', 
   port: 5432,
 });
 
-// Example query to get bookings
 const getBookings = (userId) => {
   return pool.query(`SELECT 
         b.id AS booking_id,
@@ -76,15 +75,12 @@ VALUES($1, $2, $3, $4, $5, $6);`, [user_id, restaurant_id, food_rating, service_
 
 const createOffer = async (req, res) => {
     const { discount, valid_from, valid_untill } = req.body;
-    // Получаем ID ресторана из данных пользователя, который является администратором
-    const userAdmin = req.user.admin;  // Здесь предполагается, что adminn содержит ID ресторана
-    // Проверяем, есть ли у пользователя роль администратора
+    const userAdmin = req.user.admin; 
     if (!userAdmin) {
       return res.status(403).send({ message: 'You do not have admin rights for any restaurant' });
     }
   
     try {
-      // Вставляем новое предложение в таблицу offers, используя ID ресторана
       const result = await pool.query(
         'INSERT INTO offers (restaurant_id, discount, valid_from, valid_until) VALUES ($1, $2, $3, $4) RETURNING *',
         [userAdmin, discount, valid_from, valid_untill]
@@ -99,26 +95,23 @@ const createOffer = async (req, res) => {
   };
   
 
-// Функция для генерации случайного токена
 function generateRandomToken() {
-    return crypto.randomBytes(8).toString('hex'); // Генерация случайного токена
+    return crypto.randomBytes(8).toString('hex'); 
 }
 
 const bookOffer = (req, res) => {
     const { offerId, reservedTime, phone, name, restaurantName } = req.body;
-    const userId = req.user ? req.user.id : req.body.userId || null; // Поддержка userId из body
+    const userId = req.user ? req.user.id : req.body.userId || null; 
 
     if (!offerId || !reservedTime || (!userId && (!phone || !name))) {
         return res.status(400).json({ error: "Некорректные данные бронирования" });
     }
 
-    // Приводим reservedTime к формату HH:MM:SS
+
     const formattedTime = reservedTime.length === 5 ? reservedTime : reservedTime.slice(0, 5);
 
     const queryParams = [offerId, formattedTime];
-    const reservationToken = generateRandomToken(); // Генерация случайного токена
-
-    // Запрос в базу данных в зависимости от того, есть ли userId или только phone/email
+    const reservationToken = generateRandomToken(); 
     const queryText = userId
         ? `INSERT INTO bookings (user_id, offer_id, reserved_time, reservation_token) VALUES ($1, $2, $3, $4) RETURNING *`
         : `INSERT INTO bookings (offer_id, reserved_time, phone, name, reservation_token) VALUES ($1, $2, $3, $4, $5) RETURNING *`;
@@ -131,12 +124,10 @@ const bookOffer = (req, res) => {
             return res.status(500).json({ error: "Ошибка сервера" });
         }
 
-        // Бронирование успешно создано
         const booking = result.rows[0];
 
         const trackingUrl = `http://localhost:3000/track-order/${reservationToken}`;
 
-        // Отправляем SMS, если номер телефона предоставлен
         if (phone) {
           const message = `Ваше бронирование в ресторане ${restaurantName} на ${formattedTime}. Для отслеживания статуса перейдите по ссылке: ${trackingUrl}`;
             try {
@@ -144,14 +135,13 @@ const bookOffer = (req, res) => {
                 console.log('Сообщение отправлено');
             } catch (error) {
                 console.error('Ошибка отправки SMS:', error);
-                // Не блокируем дальнейшее выполнение, даже если отправка SMS не удалась
             }
         }
 
         res.status(200).json({
             message: "Бронирование успешно!",
             booking,
-            reservationToken, // Отправляем токен для отслеживания бронирования
+            reservationToken, 
         });
     });
 };
@@ -224,7 +214,6 @@ const getRestaurantsDiscounts = async (req, res) => {
       const { restId } = req.params;
       const userId = req.user?.id;
 
-      // Получаем admin_id ресторана
       const restaurantQuery = await pool.query(
           `SELECT admin_id FROM restaurants WHERE id = $1`,
           [restId]
@@ -236,12 +225,10 @@ const getRestaurantsDiscounts = async (req, res) => {
 
       const restaurantAdminId = restaurantQuery.rows[0].admin_id;
 
-      // Проверяем, является ли пользователь админом ресторана
       if (userId !== restaurantAdminId) {
           return res.status(403).json({ message: "У вас нет прав на просмотр скидок этого ресторана" });
       }
 
-      // Получаем скидки ресторана
       const discountsQuery = await pool.query(
           `SELECT id, restaurant_id, discount, 
                   TO_CHAR(valid_time, 'HH24:MI') AS valid_time

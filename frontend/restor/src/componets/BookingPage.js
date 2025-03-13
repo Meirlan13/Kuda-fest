@@ -1,4 +1,4 @@
-import { useParams, useLocation, useNavigate } from "react-router-dom"; // Изменён импорт
+import { useParams, useLocation, useNavigate } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 import Comments from './Comments';
 import '../App.css';
@@ -7,7 +7,7 @@ import axios from "axios";
 function BookingPage() {
     const { restaurantId } = useParams();
     const location = useLocation();
-    const navigate = useNavigate(); // Используем useNavigate
+    const navigate = useNavigate(); 
     const [restaurant, setRestaurant] = useState(null);
     const [discounts, setDiscounts] = useState([]);
     const [phone, setPhone] = useState("");
@@ -83,8 +83,7 @@ function BookingPage() {
             const response = await axios.post("http://localhost:3001/book", bookingData);
             alert("Бронирование успешно!");
 
-            // Редирект на страницу с отслеживанием статуса
-            navigate(`/track-order/${response.data.reservationToken}`); // Заменили history.push на navigate
+            navigate(`/track-order/${response.data.reservationToken}`); 
         } catch (error) {
             console.error("Ошибка при бронировании:", error);
             alert("Ошибка бронирования: " + (error.response?.data || "Попробуйте снова"));

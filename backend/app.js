@@ -20,8 +20,8 @@ const sendSms = (phoneNumber, restaurantName, bookingTime) => {
 
   return client.messages.create({
       body: message,
-      from: '+18145244775', // Номер Twilio
-      to: phoneNumber // Номер телефона пользователя
+      from: '+18145244775', 
+      to: phoneNumber 
   });
 };
 
@@ -48,30 +48,30 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy({
-    usernameField: 'phone',    // define the parameter in req.body that passport can use as username and password
+    usernameField: 'phone',   
     passwordField: 'password'
 },
     async (phone, password, done) => {
-      console.log("Phone: ", phone); // Логируем email
+      console.log("Phone: ", phone); 
       try {
         const result = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
         const user = result.rows[0];
   
         if (!user) {
-          console.log("User not found"); // Логируем, если пользователь не найден
+          console.log("User not found"); 
           return done(null, false, { message: 'User not found' });
         }
   
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
-          console.log("Password match"); // Логируем, если пароль совпал
+          console.log("Password match");
           return done(null, user);
         } else {
-          console.log("Invalid password"); // Логируем, если пароль не совпал
+          console.log("Invalid password"); 
           return done(null, false, { message: 'Invalid password' });
         }
       } catch (err) {
-        console.error("Error during authentication:", err); // Логируем ошибку
+        console.error("Error during authentication:", err); 
         return done(err);
       }
     }
@@ -105,16 +105,13 @@ app.post('/register', async (req, res) => {
     const { phone, name, password } = req.body;
   
     try {
-      // Проверка, существует ли уже пользователь с таким email
       const result = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
       if (result.rows.length > 0) {
         return res.status(400).send({ message: 'Телефон уже зарегистрирован' });
       }
-  
-      // Хэширование пароля
+
       const hash = await bcrypt.hash(password, 10);
-  
-      // Регистрация нового пользователя
+
       const insertResult = await pool.query(
         'INSERT INTO users (phone, password, name) VALUES ($1, $2, $3) RETURNING *',
         [phone, hash, name]
@@ -148,7 +145,7 @@ app.post('/register', async (req, res) => {
   app.get('/discounts/:restId', getRestaurantsDiscounts)
 
 app.get('/login', (req, res) => {
-    const errorMessage = req.flash('error');  // Получаем сообщение об ошибке
+    const errorMessage = req.flash('error'); 
     res.send(`<h1>Login Page</h1><p>${errorMessage}</p>`);
   });
   
@@ -158,11 +155,9 @@ app.get('/offers',getOffers);
     req.logout((err) => {
       if (err) return res.status(500).send({ message: 'Error logging out' });
   
-      // Уничтожаем сессию явно
       req.session.destroy((err) => {
         if (err) return res.status(500).send({ message: 'Error destroying session' });
-  
-        // Удаляем куку сессии
+
         res.clearCookie('connect.sid'); 
         res.redirect('/');
       });
@@ -181,7 +176,7 @@ app.get('/bookings', async (req, res) => {
       const userId = req.user.id;
       console.log('Получение бронирований для пользователя с id:', userId);
   
-      const result = await getBookings(userId); // Получаем бронирования для пользователя
+      const result = await getBookings(userId); 
   
       if (result.rows.length === 0) {
         console.log('Бронирования не найдены для пользователя с id:', userId);
@@ -191,7 +186,7 @@ app.get('/bookings', async (req, res) => {
   
       res.status(200).json(result.rows);
     } catch (err) {
-      console.error('Ошибка при получении бронирований:', err); // Логируем ошибку
+      console.error('Ошибка при получении бронирований:', err); 
       res.status(500).send({ message: 'Error fetching bookings', error: err.message });
     }
   });
@@ -205,7 +200,6 @@ app.post('/edit-restaurant', postOffers);
   app.get('/track-order/:reservationToken', (req, res) => {
     const { reservationToken } = req.params;
 
-    // Запрос для получения информации о бронировании с подключением к таблице offers и restaurants
     const query = `
         SELECT b.*, r.name AS restaurant_name
         FROM bookings b
@@ -225,7 +219,6 @@ app.post('/edit-restaurant', postOffers);
             return res.status(404).json({ error: 'Бронирование не найдено' });
         }
 
-        // Возвращаем данные о бронировании, включая название ресторана
         res.json({
             restaurant_name: booking.restaurant_name,
             reserved_time: booking.reserved_time,

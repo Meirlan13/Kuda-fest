@@ -9,13 +9,13 @@ function AdminPage() {
     const [error, setError] = useState(null);
     const [newDiscounts, setNewDiscounts] = useState({});
 
-    // Функция загрузки скидок
+
     const fetchDiscounts = async () => {
         if (!restaurantId) return;
         try {
             setLoading(true);
             const response = await axios.get(`http://localhost:3001/discounts/${restaurantId}`, {
-                withCredentials: true, // если есть сессия или куки
+                withCredentials: true,
             });
             setDiscounts(response.data);
         } catch (error) {
@@ -26,12 +26,12 @@ function AdminPage() {
         }
     };
 
-    // Загружаем скидки при монтировании и изменении restaurantId
+
     useEffect(() => {
         fetchDiscounts();
     }, [restaurantId]);
 
-    // Функция обновления скидки
+
     const handleUpdate = async (offerId) => {
         const discount = newDiscounts[offerId];
         if (discount === undefined || discount === "") {
@@ -44,7 +44,7 @@ function AdminPage() {
                 withCredentials: true,
             });
             alert("Скидка обновлена");
-            fetchDiscounts(); // Обновляем список после изменения
+            fetchDiscounts(); 
         } catch (error) {
             console.error("Ошибка обновления скидки:", error);
             alert("Ошибка при обновлении");

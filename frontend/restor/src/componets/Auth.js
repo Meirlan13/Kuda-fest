@@ -26,25 +26,22 @@ export default function Auth() {
     const url = `http://localhost:3001/${isLogin ? "login" : "register"}`;
     const response = await fetch(url, {
       method: "POST",
-      credentials: "include",  // Важно, чтобы куки сессии передавались
+      credentials: "include", 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
   
-    const data = await response.json();  // Получаем ответ от сервера
+    const data = await response.json(); 
   
     if (!response.ok) {
       setError(data.message || "Something went wrong");
       return;
     }
   
-    // Сохраняем данные пользователя в localStorage
-    localStorage.setItem("user", JSON.stringify(data.user));  // data.user содержит данные, полученные с сервера
+    localStorage.setItem("user", JSON.stringify(data.user)); 
   
     alert(isLogin ? "Login successful!" : "Registration successful!");
   
-    // Переадресация после успешного логина
-    // window.location.href = "/bookings";  // Перенаправление на страницу бронирований
   };
   
 

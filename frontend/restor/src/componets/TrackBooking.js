@@ -3,13 +3,12 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 function TrackBooking() {
-    const { reservationToken } = useParams();  // Получаем токен из URL
+    const { reservationToken } = useParams(); 
     const [booking, setBooking] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Получаем данные о бронировании с сервера
         axios.get(`http://localhost:3001/track-order/${reservationToken}`)
             .then(response => {
                 setBooking(response.data);

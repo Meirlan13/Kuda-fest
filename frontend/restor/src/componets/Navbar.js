@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Link as ScrollLink } from "react-scroll"; // Импортируем для плавного скролла
+import { Link as ScrollLink } from "react-scroll"; 
 
-export default function Navbar({ onLoginClick }) { // Принимаем функцию открытия модалки
+export default function Navbar({ onLoginClick }) { 
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Проверяем данные о пользователе в localStorage
     const storedUser = localStorage.getItem("user");
   
     if (storedUser && storedUser !== "undefined") {
       try {
-        setUser(JSON.parse(storedUser));  // Попытка распарсить строку JSON
+        setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Ошибка при парсинге данных пользователя:", error);
       }
@@ -43,7 +42,6 @@ export default function Navbar({ onLoginClick }) { // Принимаем фун�
             </>
           ) : (
             <li><button onClick={onLoginClick} className="button">Войти</button></li> 
-            // Вместо <Link to="/login"> теперь вызываем функцию открытия модалки
           )}
         </ul>
       </div>
